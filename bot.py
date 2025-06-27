@@ -529,7 +529,7 @@ async def main():
         listen="0.0.0.0",          # listen on all IPs
         port=8443,                 # port to listen on
         webhook_url=WEBHOOK_URL,
-        webhook_path=WEBHOOK_PATH,
+        # webhook_path=WEBHOOK_PATH,
         # secret_token="your_secret_token"  # optional, but recommended
     )
 
