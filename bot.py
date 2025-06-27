@@ -193,7 +193,6 @@ async def confirm_booking(update: Update, context: ContextTypes.DEFAULT_TYPE):
     gift_name = row[TableHeaders.gift_name]
 
     # Store details in user_data so we can restore later if canceled
-    gift_name = row[TableHeaders.gift_name]
     context.user_data["last_gift"] = {
         "row_num": row_num,
         "gift_name": f"🎁 {gift_name}",
