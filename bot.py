@@ -524,18 +524,25 @@ app.add_handler(CallbackQueryHandler(button_handler))
 WEBHOOK_PATH = "/webhook"
 WEBHOOK_URL = "https://wishlist-telegram-bot.onrender.com" + WEBHOOK_PATH
 
-async def main():
+# async def main():
+#     app.run_webhook(
+#         listen="0.0.0.0",          # listen on all IPs
+#         port=443,                 # port to listen on
+#         webhook_url=WEBHOOK_URL,
+#         # webhook_path=WEBHOOK_PATH,
+#         # secret_token="your_secret_token"  # optional, but recommended
+#     )
+
+if __name__ == "__main__":
     app.run_webhook(
         listen="0.0.0.0",          # listen on all IPs
-        port=8443,                 # port to listen on
+        port=443,                 # port to listen on
         webhook_url=WEBHOOK_URL,
         # webhook_path=WEBHOOK_PATH,
         # secret_token="your_secret_token"  # optional, but recommended
     )
-
-if __name__ == "__main__":
-    import asyncio
-    asyncio.run(main())
+    # import asyncio
+    # asyncio.run(main())
 #
 # if __name__ == "__main__":
 #     app = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()
