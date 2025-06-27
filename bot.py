@@ -555,6 +555,7 @@ if __name__ == "__main__":
         listen="0.0.0.0",          # listen on all IPs
         port=443,                 # port to listen on
         webhook_url=WEBHOOK_URL,
+        url_path=WEBHOOK_PATH,  # Шлях, на який Telegram надсилатиме POST
         # webhook_path=WEBHOOK_PATH,
         # secret_token="your_secret_token"  # optional, but recommended
     )
