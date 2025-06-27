@@ -506,6 +506,9 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif cmd == "my_booked":
         await show_booked_gifts(update, context=context)
 
+WEBHOOK_PATH = "/webhook"
+WEBHOOK_URL = "https://wishlist-telegram-bot.onrender.com" + WEBHOOK_PATH
+
 app = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()
 # Add this line to set menu commands at startup
 app.post_init = set_menu_commands
@@ -521,8 +524,7 @@ app.add_handler(CallbackQueryHandler(remove_confirm, pattern=r"^remove_confirm\|
 app.add_handler(CallbackQueryHandler(remove_abort, pattern=r"^remove_abort\|"))
 app.add_handler(CallbackQueryHandler(button_handler))
 
-WEBHOOK_PATH = "/webhook"
-WEBHOOK_URL = "https://wishlist-telegram-bot.onrender.com" + WEBHOOK_PATH
+
 # async def main():
 #     app.run_webhook(
 #         listen="0.0.0.0",          # listen on all IPs
@@ -537,7 +539,7 @@ if __name__ == "__main__":
         listen="0.0.0.0",          # listen on all IPs
         port=443,                 # port to listen on
         webhook_url=WEBHOOK_URL,
-        webhook_path=WEBHOOK_PATH,
+        # webhook_path=WEBHOOK_PATH,
         # secret_token="your_secret_token"  # optional, but recommended
     )
     # import asyncio
