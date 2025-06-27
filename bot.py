@@ -506,7 +506,6 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif cmd == "my_booked":
         await show_booked_gifts(update, context=context)
 
-
 app = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()
 # Add this line to set menu commands at startup
 app.post_init = set_menu_commands
@@ -526,16 +525,13 @@ WEBHOOK_PATH = "/webhook"
 WEBHOOK_URL = "https://wishlist-telegram-bot.onrender.com" + WEBHOOK_PATH
 
 async def main():
-    # Start webhook server
-    await app.start_webhook(
-        listen="0.0.0.0",
-        port=8443,
-        url_path=WEBHOOK_PATH
+    app.run_webhook(
+        listen="0.0.0.0",          # listen on all IPs
+        port=8443,                 # port to listen on
+        webhook_url=WEBHOOK_URL,
+        webhook_path=WEBHOOK_PATH,
+        # secret_token="your_secret_token"  # optional, but recommended
     )
-    # Set webhook for Telegram
-    await app.bot.set_webhook(WEBHOOK_URL)
-    # Run until interrupted
-    await app.idle()
 
 if __name__ == "__main__":
     import asyncio
