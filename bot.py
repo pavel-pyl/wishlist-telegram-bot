@@ -510,6 +510,8 @@ WEBHOOK_PATH = "/webhook"
 WEBHOOK_URL = "https://wishlist-telegram-bot.onrender.com" + WEBHOOK_PATH
 
 import inspect
+from telegram.ext import Application
+
 print(inspect.signature(Application.run_webhook))
 app = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()
 # app = (
