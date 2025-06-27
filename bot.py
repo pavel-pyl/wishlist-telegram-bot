@@ -195,7 +195,7 @@ async def confirm_booking(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Store details in user_data so we can restore later if canceled
     context.user_data["last_gift"] = {
         "row_num": row_num,
-        "gift_name": gift_name,
+        "gift_name": f"🎁 {name}",
         "price": row[TableHeaders.price],
         "link": row[TableHeaders.link],
     }
@@ -506,26 +506,14 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     elif cmd == "my_booked":
         await show_booked_gifts(update, context=context)
 
+
+
+## WEB hook start
 WEBHOOK_PATH = "/webhook"
 WEBHOOK_URL = "https://wishlist-telegram-bot.onrender.com" + WEBHOOK_PATH
 
-import inspect
-from telegram.ext import Application
-
-print(inspect.signature(Application.run_webhook))
 app = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()
-# app = (
-#     ApplicationBuilder()
-#     .token(TELEGRAM_BOT_TOKEN)
-#     .webhook(
-#         listen="0.0.0.0",
-#         port=443,
-#         url_path=WEBHOOK_PATH,
-#         webhook_url=WEBHOOK_URL
-#     )
-#     .build()
-# )
-# Add this line to set menu commands at startup
+
 app.post_init = set_menu_commands
 app.add_handler(CommandHandler("start", start))
 app.add_handler(CommandHandler("free", show_free_gifts))
@@ -540,27 +528,17 @@ app.add_handler(CallbackQueryHandler(remove_abort, pattern=r"^remove_abort\|"))
 app.add_handler(CallbackQueryHandler(button_handler))
 
 
-# async def main():
-#     app.run_webhook(
-#         listen="0.0.0.0",          # listen on all IPs
-#         port=443,                 # port to listen on
-#         webhook_url=WEBHOOK_URL,
-#         # webhook_path=WEBHOOK_PATH,
-#         # secret_token="your_secret_token"  # optional, but recommended
-#     )
-
 if __name__ == "__main__":
-    # app.run_webhook()
     app.run_webhook(
         listen="0.0.0.0",          # listen on all IPs
         port=443,                 # port to listen on
         webhook_url=WEBHOOK_URL,
-        url_path=WEBHOOK_PATH,  # Шлях, на який Telegram надсилатиме POST
-        # webhook_path=WEBHOOK_PATH,
+        url_path=WEBHOOK_PATH,
         # secret_token="your_secret_token"  # optional, but recommended
     )
-    # import asyncio
-    # asyncio.run(main())
+## WEB hook stop
+
+
 #
 # if __name__ == "__main__":
 #     app = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()
