@@ -507,23 +507,57 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await show_booked_gifts(update, context=context)
 
 
+app = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()
+# Add this line to set menu commands at startup
+app.post_init = set_menu_commands
+app.add_handler(CommandHandler("start", start))
+app.add_handler(CommandHandler("free", show_free_gifts))
+app.add_handler(CommandHandler("my_booked", show_booked_gifts))
+app.add_handler(CallbackQueryHandler(confirm_booking, pattern="^book\\|"))
+app.add_handler(CallbackQueryHandler(finalize_booking, pattern="^confirm\\|"))
+app.add_handler(CallbackQueryHandler(remove_booking, pattern="^remove\\|"))
+app.add_handler(CallbackQueryHandler(cancel_confirmation, pattern="^cancel$"))
+app.add_handler(CallbackQueryHandler(cancel_booking, pattern="^unbook\\|"))
+app.add_handler(CallbackQueryHandler(remove_confirm, pattern=r"^remove_confirm\|"))
+app.add_handler(CallbackQueryHandler(remove_abort, pattern=r"^remove_abort\|"))
+app.add_handler(CallbackQueryHandler(button_handler))
+
+WEBHOOK_PATH = "/webhook"
+WEBHOOK_URL = "https://wishlist-telegram-bot.onrender.com" + WEBHOOK_PATH
+
+async def main():
+    # Start webhook server
+    await app.start_webhook(
+        listen="0.0.0.0",
+        port=8443,
+        url_path=WEBHOOK_PATH
+    )
+    # Set webhook for Telegram
+    await app.bot.set_webhook(WEBHOOK_URL)
+    # Run until interrupted
+    await app.idle()
+
 if __name__ == "__main__":
-    app = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()
-
-    # Add this line to set menu commands at startup
-    app.post_init = set_menu_commands
-
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("free", show_free_gifts))
-    app.add_handler(CommandHandler("my_booked", show_booked_gifts))
-    app.add_handler(CallbackQueryHandler(confirm_booking, pattern="^book\\|"))
-    app.add_handler(CallbackQueryHandler(finalize_booking, pattern="^confirm\\|"))
-    app.add_handler(CallbackQueryHandler(remove_booking, pattern="^remove\\|"))
-    app.add_handler(CallbackQueryHandler(cancel_confirmation, pattern="^cancel$"))
-    app.add_handler(CallbackQueryHandler(cancel_booking, pattern="^unbook\\|"))
-    app.add_handler(CallbackQueryHandler(remove_confirm, pattern=r"^remove_confirm\|"))
-    app.add_handler(CallbackQueryHandler(remove_abort, pattern=r"^remove_abort\|"))
-    app.add_handler(CallbackQueryHandler(button_handler))
-
-    # Start polling
-    app.run_polling()
+    import asyncio
+    asyncio.run(main())
+#
+# if __name__ == "__main__":
+#     app = ApplicationBuilder().token(TELEGRAM_BOT_TOKEN).build()
+#
+#     # Add this line to set menu commands at startup
+#     app.post_init = set_menu_commands
+#
+#     app.add_handler(CommandHandler("start", start))
+#     app.add_handler(CommandHandler("free", show_free_gifts))
+#     app.add_handler(CommandHandler("my_booked", show_booked_gifts))
+#     app.add_handler(CallbackQueryHandler(confirm_booking, pattern="^book\\|"))
+#     app.add_handler(CallbackQueryHandler(finalize_booking, pattern="^confirm\\|"))
+#     app.add_handler(CallbackQueryHandler(remove_booking, pattern="^remove\\|"))
+#     app.add_handler(CallbackQueryHandler(cancel_confirmation, pattern="^cancel$"))
+#     app.add_handler(CallbackQueryHandler(cancel_booking, pattern="^unbook\\|"))
+#     app.add_handler(CallbackQueryHandler(remove_confirm, pattern=r"^remove_confirm\|"))
+#     app.add_handler(CallbackQueryHandler(remove_abort, pattern=r"^remove_abort\|"))
+#     app.add_handler(CallbackQueryHandler(button_handler))
+#
+#     # Start polling
+#     app.run_polling()
